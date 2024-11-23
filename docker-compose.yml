@@ -1,0 +1,27 @@
+services:
+  adguardhome-sync1:
+    image: ghcr.io/bakito/adguardhome-sync
+    container_name: adguardhome-sync1
+    command: run --config /config/adguardhome-sync.yaml
+    network_mode: host
+    volumes:
+      - ${MOUNT_ROOT}/home-sync.yaml:/config/adguardhome-sync.yaml
+      - ${MOUNT_ROOT}/hosts:/etc/hosts:ro
+    ports:
+      - 8579:8579
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  adguardhome-sync2:
+    image: ghcr.io/bakito/adguardhome-sync
+    container_name: adguardhome-sync2
+    command: run --config /config/adguardhome-sync.yaml
+    network_mode: host
+    volumes:
+      - ${MOUNT_ROOT}/eltern-sync.yaml:/config/adguardhome-sync.yaml
+    ports:
+      - 8578:8578
+    restart: unless-stopped
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
